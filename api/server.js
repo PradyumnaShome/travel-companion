@@ -212,7 +212,11 @@ app.post('/api/search', async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'Server is running!' });
+});
   
-  app.listen(port, () => {
-    console.log(`API server running at http://localhost:${port}`);
-  }); 
+app.listen(port, () => {
+  console.log(`API server running at http://localhost:${port}`);
+}); 
