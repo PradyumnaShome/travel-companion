@@ -1,0 +1,14 @@
+{
+  "name": "fnb-language-helper-api",
+  "version": "1.0.0",
+  "description": "API server for FnB Language Helper",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "dotenv": "^16.4.5"
+  }
+} 
