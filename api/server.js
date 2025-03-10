@@ -23,6 +23,7 @@ app.use(cors({
     
     // En production, vous pouvez ajouter une liste d'origines autorisées
     const allowedOrigins = process.env.REACT_APP_ALLOWED_ORIGINS ? process.env.REACT_APP_ALLOWED_ORIGINS.split(',') : [];
+    console.log("Allowed Origins:", allowedOrigins);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
