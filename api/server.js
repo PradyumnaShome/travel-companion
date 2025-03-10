@@ -12,6 +12,7 @@ app.use(express.json());
 // Configuration CORS flexible
 app.use(cors({
   origin: function(origin, callback) {
+    console.log("Origin:", origin);
     // Autoriser les requêtes sans origine (ex: Postman, curl)
     if (!origin) return callback(null, true);
     
