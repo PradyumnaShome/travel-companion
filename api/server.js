@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -8,20 +9,30 @@ const port = 3001;
 
 app.use(express.json());
 
-// Configuration CORS complète
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Max-Age', '86400'); // 24 heures
-
-  // Répondre immédiatement aux requêtes OPTIONS
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  next();
-});
+// Configuration CORS flexible
+app.use(cors({
+  origin: function(origin, callback) {
+    // Autoriser les requêtes sans origine (ex: Postman, curl)
+    if (!origin) return callback(null, true);
+    
+    // En développement, accepter localhost sur n'importe quel port
+    if (process.env.NODE_ENV === 'development' && origin.match(/^http:\/\/localhost:/)) {
+      return callback(null, true);
+    }
+    
+    // En production, vous pouvez ajouter une liste d'origines autorisées
+    const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Permet l'envoi de cookies si nécessaire
+  maxAge: 86400 // Cache la réponse preflight pendant 24h
+}));
 
 const GOOGLE_CSE_ID = process.env.REACT_APP_GOOGLE_CSE_ID; // ID du moteur de recherche personnalisé
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
