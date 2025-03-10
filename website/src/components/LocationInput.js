@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Crosshair } from 'lucide-react';
+import { MapPin, Navigation } from 'lucide-react';
 import LocationService from '../services/LocationService';
 import ErrorPopup from './ErrorPopup';
 
@@ -63,9 +63,9 @@ const LocationInput = ({ onLocationChange, isLoading, setIsLoading, setError: se
           onClick={getCurrentLocation}
           className="location-detect-btn"
           disabled={isLoading}
-          title="Détecter ma position"
+          title="Détecter ma position actuelle"
         >
-          <Crosshair />
+          <Navigation />
         </button>
       </form>
       

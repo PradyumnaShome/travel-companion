@@ -71,9 +71,54 @@ async function getPlaceImage(placeName) {
   }
 }
 
+const generatePrompt = (location, targetLanguage = 'fr') => `
+You are an expert travel assistant analyzing the location "${location}" and providing:
+
+1. The main local language spoken in this location
+2. 3 recommended places within a 5-10 minute walking radius
+3. 3 useful contextual dialogues
+
+All descriptions and translations should be in ${targetLanguage}.
+
+Expected JSON format:
+{
+  "localLanguage": {
+    "code": "local language ISO code (e.g., en, ja, es)",
+    "name": "local language name in ${targetLanguage}",
+    "nativeName": "language name in the local language"
+  },
+  "topItems": [
+    {
+      "name": "Place name",
+      "description": "Description in ${targetLanguage} (10 words maximum)",
+      "type": "restaurant|cafe|bar|museum|shop|attraction"
+    }
+  ],
+  "dialogs": [
+    {
+      "type": "general|directions|shopping|emergency",
+      "prompt": "Dialog title in ${targetLanguage}",
+      "messages": [
+        {
+          "speaker": "tourist|local",
+          "text": "Text in local language (10 words maximum)",
+          "pronunciation": "Pronunciation guide if relevant",
+          "translation": "Translation in ${targetLanguage}"
+        }
+      ]
+    }
+  ]
+}
+
+Ensure that:
+1. Dialog types cover: general conversations, directions, shopping/information, and emergencies
+2. Dialogues are relevant to the local context (e.g., in a museum, talk about the museum, in a restaurant, talk about the restaurant, etc.)
+3. Each recommended place has a specific type for appropriate default image display
+4. I need valid JSON, with no unnecessary whitespace or formatting. Avoid using backticks.`;
+
 // Endpoint unifié pour la recherche de lieu et les recommandations
 app.post('/api/search', async (req, res) => {
-  const { address, coords } = req.body;
+  const { address, coords, targetLanguage } = req.body;
   
   try {
     // Obtenir les coordonnées via géocodage si une adresse est fournie
@@ -147,72 +192,45 @@ app.post('/api/search', async (req, res) => {
         max_tokens: 1000,
         messages: [{
           role: 'user',
-          content: `Tu es un expert local à ${place.city || place.region}, ${place.country}. 
-          L'utilisateur se trouve à "${place.name}" (${place.address}).
-          Le contexte du lieu inclut : ${place.nearbyContext.join(', ')}.
-          Le quartier est : ${place.neighborhood || 'non spécifié'}.
-        
-          Recommande 3 établissements intéressants (priorité aux restaurants, bars, cafés et lieux touristiques) dans un rayon de 5-10 minutes à pied.
-          Réponds UNIQUEMENT avec un objet JSON valide, sans formatage Markdown ni texte supplémentaire.
-          
-          Pour chaque lieu :
-          - Fournis le nom EXACT de l'établissement tel qu'il apparaît sur Google Maps
-          - Inclus une description courte et attrayante
-          
-          Format JSON attendu :
-          {
-            "topItems": [
-              {
-                "name": "Nom exact de l'établissement",
-                "pronunciation": "Description courte et attrayante"
-              }
-            ],
-            "dialogs": [
-              {
-                "prompt": "Au restaurant/café/bar",
-                "messages": [
-                  {
-                    "speaker": "tourist",
-                    "text": "Phrase utile en anglais",
-                    "translation": "Traduction en français"
-                  }
-                ]
-              }
-            ]
-          }` }]
-        })
+          content: generatePrompt(place.name, targetLanguage)
+        }]
+      })
+    });
+  
+    if (!recommendationsResponse.ok) {
+      const errorData = await recommendationsResponse.text();
+      console.error('Erreur Claude:', {
+        status: recommendationsResponse.status,
+        statusText: recommendationsResponse.statusText,
+        data: errorData
       });
-  
-      if (!recommendationsResponse.ok) {
-        const errorData = await recommendationsResponse.text();
-        console.error('Erreur Claude:', {
-          status: recommendationsResponse.status,
-          statusText: recommendationsResponse.statusText,
-          data: errorData
-        });
-        throw new Error(`Erreur API Claude: ${recommendationsResponse.
-        status} ${recommendationsResponse.statusText}`);
-      }
-  
-      const recommendationsData = await recommendationsResponse.json();
-      console.log(recommendationsData);
-      const recommendations = JSON.parse(recommendationsData.content[0].
-      text);
-  
-      // Ajouter les photos pour chaque lieu
-      for (const item of recommendations.topItems) {
-        const photo = await getPlaceImage(item.name + " " + (place.city || place.region));
-        if (photo) {
-          item.image = photo;
-        }
-      }
-  
-      res.json({ ...place, ...recommendations });
-    } catch (error) {
-      console.error('Erreur:', error);
-      res.status(500).json({ error: error.message });
+      throw new Error(`Erreur API Claude: ${recommendationsResponse.
+      status} ${recommendationsResponse.statusText}`);
     }
-  });
+  
+    const recommendationsData = await recommendationsResponse.json();
+    console.log(recommendationsData);
+    
+    // Nettoyer la réponse de Claude des marqueurs Markdown
+    const cleanedResponse = recommendationsData.content[0].text
+      .replace(/```json\n?/g, '')  // Supprime ```json et le saut de ligne optionnel
+      .replace(/```/g, '')         // Supprime les ``` de fermeture
+      .trim();                     // Supprime les espaces en début/fin
+    
+    const recommendations = JSON.parse(cleanedResponse);
+  
+    // Ajouter les images par défaut aux lieux recommandés
+    recommendations.topItems = recommendations.topItems.map(item => ({
+      ...item,
+      image: item.image
+    }));
+  
+    res.json({ ...place, ...recommendations });
+  } catch (error) {
+    console.error('Erreur:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running!' });
