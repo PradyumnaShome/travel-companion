@@ -159,7 +159,7 @@ export default function App() {
             </div>
 
             <div className="places-section">
-              <h2 className="section-title">Lieux à proximité</h2>
+              <h2 className="section-title">Nearby Places</h2>
               <div className="items-grid">
                 {placeDetails.topItems?.map((item, index) => (
                   <div key={index} className="item-card">
