@@ -144,7 +144,6 @@ select option {
     gap: 12px;
     width: 100%;
     text-align: center;
-    justify-content: center;
   }
 
   .language-preferences {
@@ -459,8 +458,6 @@ select option {
   line-height: 1.5;
   text-align: left;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .chat-bubble.local {
@@ -483,9 +480,8 @@ select option {
 
 .chat-bubble .message-text {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-bottom: 8px; 
+  text-wrap: wrap;
 }
 
 .chat-bubble .translation {
@@ -493,9 +489,7 @@ select option {
   margin-top: 8px;
   padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-wrap: wrap;
 }
 
 .tourist .translation {
