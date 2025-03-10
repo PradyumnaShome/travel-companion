@@ -72,9 +72,12 @@ async function getPlaceImage(placeName) {
 }
 
 const generatePrompt = (location, targetLanguage = 'fr') => `
-You are an expert travel assistant analyzing the location "${location}" and providing:
+You are an expert travel assistant analyzing the location "${location}". 
 
-1. The main local language spoken in this location
+Important: Use the COMPLETE address to determine the correct location. Do not assume the location based on partial matches (e.g., don't assume "5th Avenue" is in New York unless explicitly specified).
+
+Provide:
+1. The main local language spoken in this EXACT location
 2. 3 recommended places within a 5-10 minute walking radius
 3. 3 useful contextual dialogues
 
@@ -192,7 +195,7 @@ app.post('/api/search', async (req, res) => {
         max_tokens: 1000,
         messages: [{
           role: 'user',
-          content: generatePrompt(place.name, targetLanguage)
+          content: generatePrompt(place.address, targetLanguage)
         }]
       })
     });

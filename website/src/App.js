@@ -190,6 +190,15 @@ export default function App() {
             setError(null);
             setDebugPrompt(null);
           }}
+          isLoading={false}
+        />
+      )}
+
+      {isLoading && (
+        <ErrorPopup
+          message="Loading..."
+          onClose={() => {}}
+          isLoading={true}
         />
       )}
     </div>
