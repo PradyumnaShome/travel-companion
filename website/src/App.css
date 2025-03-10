@@ -435,6 +435,14 @@ select option {
 
 .item-pronunciation {
   color: #666;
+  font-size: 13px;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.item-description {
+  color: #666;
   font-size: 14px;
   text-align: center;
 }
@@ -480,14 +488,29 @@ select option {
 
 .chat-bubble .message-text {
   white-space: nowrap;
-  margin-bottom: 8px; 
+  margin-bottom: 4px;
   text-wrap: wrap;
+}
+
+.chat-bubble .pronunciation {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  font-style: italic;
+  margin: 4px 0;
+  padding: 4px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-wrap: wrap;
+}
+
+.chat-bubble.local .pronunciation {
+  color: rgba(0, 0, 0, 0.6);
+  border-top-color: rgba(0, 0, 0, 0.1);
 }
 
 .chat-bubble .translation {
   font-size: 13px;
-  margin-top: 8px;
-  padding-top: 8px;
+  margin-top: 4px;
+  padding-top: 4px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   text-wrap: wrap;
 }

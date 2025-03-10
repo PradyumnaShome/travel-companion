@@ -79,7 +79,12 @@ Important: Use the COMPLETE address to determine the correct location. Do not as
 Provide:
 1. The main local language spoken in this EXACT location
 2. 3 recommended places within a 5-10 minute walking radius
-3. 3 useful contextual dialogues
+3. 3 useful contextual dialogues with phonetic pronunciations
+
+For languages that use non-Latin scripts (e.g., Japanese, Chinese, Korean, Thai, Arabic, etc.), provide a simple phonetic pronunciation guide using Latin characters. The pronunciation should be simple and intuitive, NOT using IPA symbols. For example:
+- Japanese "こんにちは" → "kon-nee-chee-wah"
+- Chinese "你好" → "nee-how"
+- Thai "สวัสดี" → "sa-wat-dee"
 
 All descriptions and translations should be in ${targetLanguage}.
 
@@ -94,7 +99,8 @@ Expected JSON format:
     {
       "name": "Place name",
       "description": "Description in ${targetLanguage} (10 words maximum)",
-      "type": "restaurant|cafe|bar|museum|shop|attraction"
+      "type": "restaurant|cafe|bar|museum|shop|attraction",
+      "pronunciation": "Simple phonetic pronunciation in Latin characters"
     }
   ],
   "dialogs": [
@@ -105,7 +111,7 @@ Expected JSON format:
         {
           "speaker": "tourist|local",
           "text": "Text in local language (10 words maximum)",
-          "pronunciation": "Pronunciation guide if relevant",
+          "pronunciation": "Simple phonetic pronunciation in Latin characters",
           "translation": "Translation in ${targetLanguage}"
         }
       ]
@@ -115,9 +121,11 @@ Expected JSON format:
 
 Ensure that:
 1. Dialog types cover: general conversations, directions, shopping/information, and emergencies
-2. Dialogues are relevant to the local context (e.g., in a museum, talk about the museum, in a restaurant, talk about the restaurant, etc.)
+2. Dialogues are relevant to the local context
 3. Each recommended place has a specific type for appropriate default image display
-4. I need valid JSON, with no unnecessary whitespace or formatting. Avoid using backticks.`;
+4. ALWAYS include phonetic pronunciations for non-Latin script languages
+5. Make pronunciations simple and intuitive for tourists to read
+6. I need valid JSON, with no unnecessary whitespace or formatting. Avoid using backticks.`;
 
 // Endpoint unifié pour la recherche de lieu et les recommandations
 app.post('/api/search', async (req, res) => {
@@ -192,7 +200,7 @@ app.post('/api/search', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-3-7-sonnet-20250219',
-        max_tokens: 1000,
+        max_tokens: 1500,
         messages: [{
           role: 'user',
           content: generatePrompt(place.address, targetLanguage)

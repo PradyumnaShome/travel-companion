@@ -143,6 +143,9 @@ export default function App() {
                   {selectedDialog.messages.map((msg, index) => (
                     <div key={index} className={`chat-bubble ${msg.speaker}`}>
                       <div className="message-text">{msg.text}</div>
+                      {msg.pronunciation && (
+                        <div className="pronunciation">{msg.pronunciation}</div>
+                      )}
                       <div className="translation">{msg.translation}</div>
                     </div>
                   ))}
@@ -173,6 +176,9 @@ export default function App() {
                     />
                     <div className="item-info">
                       <div className="item-name">{item.name}</div>
+                      {item.pronunciation && (
+                        <div className="item-pronunciation">{item.pronunciation}</div>
+                      )}
                       <div className="item-description">{item.description}</div>
                     </div>
                   </div>
