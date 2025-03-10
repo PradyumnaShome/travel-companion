@@ -123,13 +123,13 @@ select option {
 
 @media (max-width: 768px) {
   body {
-    padding: 0;
+    padding: 10px;
   }
 
   .container {
-    border-radius: 0;
+    border-radius: 12px;
     padding: 20px;
-    min-height: 100vh;
+    min-height: calc(100vh - 20px);
   }
 
   .main-content {
@@ -146,7 +146,7 @@ select option {
 
   .controls-section {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
   }
 
@@ -191,23 +191,26 @@ select option {
     text-align: left;
     padding: 14px;
   }
+
+  .app-header {
+    gap: 15px;
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 480px) {
+  body {
+    padding: 8px;
+  }
+
   .container {
+    border-radius: 8px;
     padding: 16px;
   }
 
   .app-header {
-    margin-bottom: 20px;
-  }
-
-  h1 {
-    font-size: 32px;
-    margin: 0 0 10px 0;
-    padding: 0 10px;
-    white-space: normal;
-    text-align: center;
+    gap: 12px;
+    margin-bottom: 8px;
   }
 
   .controls-section {
@@ -816,10 +819,11 @@ button:hover svg {
 }
 
 .controls-section {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 15px;
-  align-items: start;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  flex: 1;
 }
 
 .language-selector {
@@ -954,8 +958,8 @@ button:hover svg {
   margin-bottom: 15px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-start;
+  gap: 20px;
   padding-bottom: 15px;
   border-bottom: 2px solid rgba(67, 160, 71, 0.1);
 }
@@ -971,7 +975,7 @@ h1 {
 
 .controls-section {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 20px;
   flex: 1;
