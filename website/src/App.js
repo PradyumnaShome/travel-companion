@@ -48,7 +48,7 @@ export default function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           address: newLocation.address,
           coords: newLocation.coords,
           targetLanguage: targetLanguage
@@ -57,7 +57,7 @@ export default function App() {
 
       const data = await response.json();
       setLocalLanguage(data.localLanguage);
-      
+
       const updatedPlaces = [
         {
           name: newLocation.name,
@@ -82,31 +82,31 @@ export default function App() {
     <div className="container">
       <header className="app-header">
         <h1>Travel Companion</h1>
-        <div className="controls-section">
-          <div className="language-preferences">
-            <div className="language-selector">
-              <label>Langue d'affichage :</label>
-              <select 
-                value={targetLanguage}
-                onChange={(e) => setTargetLanguage(e.target.value)}
-                className="language-select"
-              >
-                {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
-                  <option key={code} value={code}>{name}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <LocationInput
-            onLocationChange={handleLocationChange}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            setError={setError}
-            setStatus={setStatus}
-          />
-        </div>
       </header>
+      <div className="controls-section">
+        <div className="language-preferences">
+          <div className="language-selector">
+            <label>Langue d'affichage :</label>
+            <select
+              value={targetLanguage}
+              onChange={(e) => setTargetLanguage(e.target.value)}
+              className="language-select"
+            >
+              {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
+                <option key={code} value={code}>{name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <LocationInput
+          onLocationChange={handleLocationChange}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          setError={setError}
+          setStatus={setStatus}
+        />
+      </div>
 
       {selectedPlace && placeDetails && (
         <div className="content-wrapper">
@@ -115,13 +115,13 @@ export default function App() {
               <div className="place-name">{selectedPlace.name}</div>
               <div className="place-address">{selectedPlace.address}</div>
             </div>
-            
+
             <div className="languages-info">
               <div className="language-row display-language">
                 <span className="language-label">Langue d'affichage :</span>
                 <span className="language-name">{SUPPORTED_LANGUAGES[targetLanguage]}</span>
               </div>
-              
+
               {placeDetails.localLanguage && (
                 <div className="language-row local-language">
                   <span className="language-label">Langue locale :</span>
@@ -163,9 +163,9 @@ export default function App() {
               <div className="items-grid">
                 {placeDetails.topItems?.map((item, index) => (
                   <div key={index} className="item-card">
-                    <img 
-                      src={item.image || DEFAULT_IMAGES[item.type] || DEFAULT_IMAGES.default} 
-                      alt={item.name} 
+                    <img
+                      src={item.image || DEFAULT_IMAGES[item.type] || DEFAULT_IMAGES.default}
+                      alt={item.name}
                       className="item-image"
                       onError={(e) => {
                         e.target.src = DEFAULT_IMAGES.default;
