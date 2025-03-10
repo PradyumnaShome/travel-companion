@@ -50,7 +50,7 @@ export const getPlaceFromAddress = async (address) => {
 
 const searchPlace = async ({ address, coords }) => {
   try {
-    const response = await fetch('http://' + process.env.REACT_APP_API_URL + '/api/search', {
+    const response = await fetch(process.env.REACT_APP_API_URL + '/api/search', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
