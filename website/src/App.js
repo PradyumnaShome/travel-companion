@@ -86,7 +86,7 @@ export default function App() {
       <div className="controls-section">
         <div className="language-preferences">
           <div className="language-selector">
-            <label>Langue d'affichage :</label>
+            <label>Display Language</label>
             <select
               value={targetLanguage}
               onChange={(e) => setTargetLanguage(e.target.value)}
@@ -118,13 +118,13 @@ export default function App() {
 
             <div className="languages-info">
               <div className="language-row display-language">
-                <span className="language-label">Langue d'affichage :</span>
+                <span className="language-label">Display Language</span>
                 <span className="language-name">{SUPPORTED_LANGUAGES[targetLanguage]}</span>
               </div>
 
               {placeDetails.localLanguage && (
                 <div className="language-row local-language">
-                  <span className="language-label">Langue locale :</span>
+                  <span className="language-label">Local Language</span>
                   <span className="language-name">{placeDetails.localLanguage.name}</span>
                   <span className="native-name">({placeDetails.localLanguage.nativeName})</span>
                 </div>
@@ -134,11 +134,11 @@ export default function App() {
 
           <div className="main-content">
             <div className="dialogs-section">
-              <h2 className="section-title">Dialogues courants</h2>
+              <h2 className="section-title">Common Dialogues</h2>
               {selectedDialog ? (
                 <div className="chat-container">
                   <button className="back-button" onClick={() => setSelectedDialog(null)}>
-                    ← Retour aux dialogues
+                    ← Back to dialogues
                   </button>
                   {selectedDialog.messages.map((msg, index) => (
                     <div key={index} className={`chat-bubble ${msg.speaker}`}>

@@ -52,7 +52,7 @@ const LocationInput = ({ onLocationChange, isLoading, setIsLoading, setError: se
         <MapPin className="location-icon" />
         <input
           type="text"
-          placeholder="Entrez une adresse"
+          placeholder="Enter an address"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           className="location-field"
@@ -63,7 +63,7 @@ const LocationInput = ({ onLocationChange, isLoading, setIsLoading, setError: se
           onClick={getCurrentLocation}
           className="location-detect-btn"
           disabled={isLoading}
-          title="Détecter ma position actuelle"
+          title="Detect my current location"
         >
           <Navigation />
         </button>
